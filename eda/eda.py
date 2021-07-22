@@ -15,12 +15,22 @@ class EDA():
         continuous: a list of columns that are continuous
         '''
         self.data = data
-        self.dtypes = ['O', 'float', 'int', 'datetime64[ns]', 'bool']
+        self.dtypes = ['O', 'float', 'int', 'datetime64[ns]', 'bool', 'other']
         self.categorical = categorical
         self.continuous = continuous
         
     def _calc_number_of_feature_types(self):
         unique_dtypes = set(self.data.dtypes.to_dict().values())
+        dtypes_lookup = {}
+        for i in unique_dtypes:
+            dtype_bool = False
+            for j in self.dtypes:
+                if i==j:
+                    dtypes_lookup[i] = j 
+                    dtype_bool=True
+                    break
+            if not dtype_bool:
+                dtypes_lookup[i] = 'other'
 
         self.num_dtypes = {key:0 for key in self.dtypes}
         for key, value in self.data.dtypes.to_dict().items():
@@ -42,7 +52,7 @@ class EDA():
         
         return results
     
-    def _plot_categories_pct_of_total(column_to_groupby:str, column_to_agg:str, column_to_agg_value_order: list, figsize= (10,8)):
+    def _plot_categories_pct_of_total(self, column_to_groupby:str, column_to_agg:str, column_to_agg_value_order: list, figsize= (10,8)):
         '''
         TODO: write docstrings
         '''
