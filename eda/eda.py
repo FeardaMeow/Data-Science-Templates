@@ -34,22 +34,25 @@ class EDA():
         
         return results
     
-    def _plot_categories_pct_of_total(column_to_groupby:str, column_to_agg:str, column_to_agg_value_order: list, figsize= (10,8)):
+    def _plot_categories_pct_of_total(column_to_groupby:str, column_to_agg:str, column_to_agg_value_order: list, threshold = None, figsize= (10,8)):
         '''
         TODO: write docstrings
         '''
-        figure = (self.data.groupby(column_to_groupby)[column_to_agg]
+        figure_data = (self.data.groupby(column_to_groupby)[column_to_agg]
         .value_counts(normalize = True)
         .mul(100)
         .rename('percent')
         .reset_index())
+
+        if threshold is not None:
+            figure_data[figure_data > threshold]
 
         fig, ax = plt.subplots(figsize = figsize)
         
         sns.barplot(x=column_to_groupby, 
                     y="percent", 
                     hue=column_to_agg, 
-                    data= figure, 
+                    data= figure_data, 
                     ax = ax, 
                     order = column_to_agg_value_order,
                     hue_order = column_to_agg_value_order)
