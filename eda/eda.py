@@ -3,6 +3,28 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
+##### EDA STEPS #####
+# Column names and definition
+
+# Column datatypes and possible values
+
+# Sample (head) of the data
+
+# Statistical summaries
+## Number of categorical and continuous features
+## Number of dtypes: DONE
+
+# Categorical Data
+## Missing values: DONE
+## Relative frequencies
+## Correlations
+
+# Continuous Data
+## Missing values
+## Histograms for distribution
+## Means, standard deviation, medians, etc
+## Correlations
+
 # Create an EDA class that contains all of these steps outlined below
 class EDA():
     '''
@@ -19,7 +41,7 @@ class EDA():
         self.categorical = categorical
         self.continuous = continuous
         
-    def _calc_number_of_feature_types(self):
+    def _calc_number_of_dtypes(self):
         unique_dtypes = set(self.data.dtypes.to_dict().values())
         dtypes_lookup = {}
         for i in unique_dtypes:
@@ -35,7 +57,7 @@ class EDA():
         self.num_dtypes = {key:0 for key in self.dtypes}
         for key, value in self.data.dtypes.to_dict().items():
             # Look up value and add it
-            self.num_dtypes[value] += 1
+            self.num_dtypes[dtypes_lookup[value]] += 1
     
     def head(self, *args, **kwargs):
         # Show head of data, pass arguements through
