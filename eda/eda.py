@@ -15,8 +15,11 @@ class EDA():
         self.continuous = continuous
         
     def _calc_number_of_feature_types(self):
+        unique_dtypes = set(self.data.dtypes.to_dict().values())
+
         self.num_dtypes = {key:0 for key in self.dtypes}
-        for key, value in self.data.dtypes.to_dict():
+        for key, value in self.data.dtypes.to_dict().items():
+            # Look up value and add it
             self.num_dtypes[value] += 1
     
     def head(self, *args, **kwargs):
@@ -58,4 +61,3 @@ class EDA():
         ax.legend(title = column_to_agg, loc = 'best')
         plt.show()
         
-    
