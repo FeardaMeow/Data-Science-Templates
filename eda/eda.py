@@ -1,3 +1,8 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
 # Create an EDA class that contains all of these steps outlined below
 class EDA():
     '''
@@ -61,3 +66,4 @@ class EDA():
         ax.legend(title = column_to_agg, loc = 'best')
         plt.show()
         
+    
