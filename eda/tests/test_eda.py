@@ -38,3 +38,7 @@ def test_dtypes_other_count(test_data):
 def test_missing_data(test_data):
     missing = test_data._calculate_number_of_missing_values(percentage=False, plot=False)
     assert missing[0] == 0
+
+# head test
+def test_head(test_data):
+    assert test_data.head(10).shape[0] == 10

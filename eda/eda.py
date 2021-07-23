@@ -8,10 +8,10 @@ import numpy as np
 
 # Column datatypes and possible values
 
-# Sample (head) of the data
+# Sample (head) of the data: DONE
 
 # Statistical summaries
-## Number of categorical and continuous features
+## Number of categorical and continuous features: DONE
 ## Number of dtypes: DONE
 
 # Categorical Data
@@ -20,7 +20,7 @@ import numpy as np
 ## Correlations
 
 # Continuous Data
-## Missing values
+## Missing values: DONE
 ## Histograms for distribution
 ## Means, standard deviation, medians, etc
 ## Correlations
@@ -40,6 +40,11 @@ class EDA():
         self.dtypes = ['O', 'float', 'int', 'datetime64[ns]', 'bool', 'other']
         self.categorical = categorical
         self.continuous = continuous
+        self._util()
+
+    def _util(self):
+        self.num_categorical = len(self.categorical)
+        self.num_continuous = len(self.continuous)
         
     def _calc_number_of_dtypes(self):
         unique_dtypes = set(self.data.dtypes.to_dict().values())
