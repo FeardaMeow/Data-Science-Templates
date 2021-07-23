@@ -2,16 +2,17 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import emoji
 
 ##### EDA STEPS #####
 # Column names and definition
 
 # Column datatypes and possible values
 
-# Sample (head) of the data: DONE
+# Sample (head) of the data
 
 # Statistical summaries
-## Number of categorical and continuous features: DONE
+## Number of categorical and continuous features
 ## Number of dtypes: DONE
 
 # Categorical Data
@@ -20,17 +21,29 @@ import numpy as np
 ## Correlations
 
 # Continuous Data
-## Missing values: DONE
+## Missing values
 ## Histograms for distribution
 ## Means, standard deviation, medians, etc
 ## Correlations
 
-# Create an EDA class that contains all of these steps outlined below
-class EDA():
+# Text Data
+## Pre-processing
+### Convert emojis into text
+### Remove tagged users "@"
+### Remove URLs 
+## wordclouds
+## text length
+## word counts
+## top unigrams (individual words)
+### before and after removing words
+## top bigrams
+### before and after removing words
+## Topic Modeling
+### TF-IDF
     '''
     pass
     '''
-    def __init__(self, data, categorical, continuous):
+    def __init__(self, data, categorical=None, continuous=None, text=None):
         '''
         data: a pandas dataframes with the data types already set to be the correct ones
         categorical: a list columns that are categorical
@@ -40,12 +53,40 @@ class EDA():
         self.dtypes = ['O', 'float', 'int', 'datetime64[ns]', 'bool', 'other']
         self.categorical = categorical
         self.continuous = continuous
+        self.text = text
         self._util()
 
     def _util(self):
-        self.num_categorical = len(self.categorical)
-        self.num_continuous = len(self.continuous)
-        
+        self.num_categorical = len(self.categorical) if self.categorical != None else 0
+        self.num_continuous = len(self.continuous) if self.continuous != None else 0
+        self.num_text = len(self.text) if self.text != None else 0
+    
+    def _remove_url(self):
+        pattern=r'(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))'
+        for col_i in self.text:
+            self.data[col_i] = self.data[col_i].str.replace(pattern,'')
+
+    def _replace_emojis(self):
+        for col_i in self.text:
+            self.data[col_i] = self.data[col_i].apply(emoji.demojize, delimiters=("", " "))
+
+    def _remove_tags(self):
+        pattern = r"\@\w+[,]|\@\w+|[,]\@\w+"
+        for col_i in self.text:
+            self.data[col_i] = self.data[col_i].str.replace(pattern,'')
+
+    def len_of_text(self, column):
+        if column not in self.text:
+            raise Exception("No Text columns to analyze, please add them to text")
+
+        return self.data[column].apply(lambda x: len(x))
+
+    def number_of_words(self,column):
+        if column not in self.text:
+            raise Exception("No Text columns to analyze, please add them to text")
+
+        return self.data[column].str.count('\w+')
+
     def _calc_number_of_dtypes(self):
         unique_dtypes = set(self.data.dtypes.to_dict().values())
         dtypes_lookup = {}
